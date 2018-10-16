@@ -1,0 +1,1 @@
+This little MATLAB toolbox allows the creation of a series of Gammatone filters according to the description in: Hohmann, V. 2002. « Frequency analysis and synthesis using a Gammatone filterbank ». Acta Acustica 88(3):433-42.
