@@ -3,7 +3,7 @@ function [ C, E, fc, ERB ] = gammatone_filtering( S, fmin, fmax, d, ERBb, fs, n,
 %   Complex responses C and envelopes E of a gammatone filterbank defined with
 %   gammatone_filterbank( fmin, fmax, d, ERBb, fs, n ), applied to sound S.
 %   If display='yes', a display of the output is provided.
-%   If display='yes', print the processing states.
+%   If verbose='yes', print the processing states.
 % %%%% WARNING : ERB doesn't work yet !
 %
 % Leo Varnet 2016
@@ -36,31 +36,7 @@ if isyes(verbose)
     fprintf('\ngenerating the gammatone filterbank\n');
 end
 [gammatones, fc, ERB] = gammatone_filterbank( fmin, fmax, d, ERBb, fs, n );
-Nfilters = size(gammatones,1);
-Nsamples = length(S);
-C = zeros(Nsamples,Nfilters);
-for i_filter=1:Nfilters
-    if isyes(verbose)
-        fprintf(['filtering (gammatone ' num2str(i_filter) ' of ' num2str(Nfilters) ')\n']);
-    end
-    gammatone_response = filter((gammatones(i_filter,:)),1,S);
-    gammatone_response=gammatone_response(:);
-    % delay correction
-    [~,samples_delay] = max(abs(gammatones(i_filter,:)));
-    gammatone_response_correct = [gammatone_response; zeros(samples_delay,1)];
-    gammatone_response_correct = gammatone_response_correct(end-Nsamples+1 : end);
-    C(:,i_filter) = gammatone_response_correct;
-end
+[ C, E] = apply_gammatone_filterbank(S, gammatones, fs, fc, display, verbose);
 
-E = abs(C);
-
-if isyes(display)
-    figure;
-    for i_filter=1:Nfilters
-        subplot(Nfilters,1,i_filter);
-        plot((1:Nsamples)/fs,E(i_filter,:)/max(E(i_filter,:)),'b',(1:Nsamples)/fs,real(C(i_filter,:))/max(real(C(i_filter,:))),'r');
-        title(['response of the gammatone filter at ' num2str(fc(i_filter)) ' Hz'])
-    end
-end
 end
 
