@@ -8,6 +8,9 @@ function [ C, E] = apply_gammatone_filterbank(S, gammatones, fs, fc, display, ve
 %   If display='yes', a display of the output is provided.
 %   If verbose='yes', print the processing states.
 %
+% This function requires the functions isyes.m and plot_channel.m from the
+% toolbox MFB model (https://github.com/LeoVarnet/MFB_Model)
+%
 % Leo Varnet 2020
 
 % default arguments
